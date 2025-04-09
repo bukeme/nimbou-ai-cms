@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 
 interface Card {
   id: number;
@@ -45,7 +46,9 @@ const CardGrid: React.FC = () => {
   const fetchContent = () => {
     axios
       .get("https://nimbou-api.stylconmarketplace.com/api/content/")
-      .then((response) => setCards(response.data));
+      .then((response) => {
+        setCards(response.data);
+      });
   };
 
   useEffect(() => {
@@ -144,16 +147,17 @@ const CardGrid: React.FC = () => {
         setIsCreateModalOpen(false);
       });
   };
+  console.log(!cards.length);
 
   return (
     <div className="container mx-auto p-4">
-      <div className="relative mb-4">
+      <div className="relative pb-14 md:pb-0 mb-4">
         <h1 className="text-center font-medium text-3xl">
           Content Management System
         </h1>
         <button
           onClick={openCreateModal}
-          className="cursor-pointer absolute -translate-y-1/2 top-1/2 right-0 bg-green-500 text-sm text-white px-3 py-2 rounded hover:bg-green-600 space-x-3"
+          className="cursor-pointer absolute bottom-0 md:bottom-auto left-1/2 md:left-auto -translate-x-1/2 md: translate-x-auto md:-translate-y-1/2 md:top-1/2 md:right-0 bg-green-500 text-sm text-white px-3 py-2 rounded hover:bg-green-600 space-x-3"
         >
           <FontAwesomeIcon icon={faPlus} />
           <span>Create Content</span>
@@ -161,9 +165,9 @@ const CardGrid: React.FC = () => {
       </div>
 
       {/* Grid of Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {cards &&
-          cards.map((card) => (
+      {cards.length ? (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {cards.map((card) => (
             <div
               key={card.id}
               className="bg-white shadow rounded-lg p-4 flex flex-col"
@@ -194,7 +198,16 @@ const CardGrid: React.FC = () => {
               </div>
             </div>
           ))}
-      </div>
+        </div>
+      ) : (
+        <div className="flex justify-center mt-24">
+          <ClipLoader
+            color="gray"
+            loading={!(cards as Card[]).length}
+            size={50}
+          />
+        </div>
+      )}
 
       {/* Read More Modal */}
       {selectedReadCard && (

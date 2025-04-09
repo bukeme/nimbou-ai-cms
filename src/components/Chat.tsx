@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import aiChatImg from "../assets/ai-chat-img.png";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 
 interface ChatMessage {
   id: number;
@@ -52,7 +53,7 @@ const Chat: React.FC = () => {
   }, [messages]);
 
   return (
-    <div className="h-[calc(100vh-64px)] py-4 px-32">
+    <div className="h-[calc(100vh-64px)] px-4 py-2 md:py-4 md:px-32">
       <div className="h-full flex flex-col justify-center">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-gray-500 mb-3">
@@ -96,13 +97,17 @@ const Chat: React.FC = () => {
             onChange={(e) => setInputValue(e.target.value)}
             className="w-full rounded-lg bg-white h-18 p-2 outline-none border border-gray-300"
           ></textarea>
-          <button
-            disabled={isLoading}
-            type="submit"
-            className="bg-blue-500 text-white px-2 py-1 cursor-pointer rounded hover:bg-blue-600 transition-colors"
-          >
-            <FontAwesomeIcon icon={faPaperPlane} />
-          </button>
+          {isLoading ? (
+            <ClipLoader color="lighgray" loading={isLoading} size={40} />
+          ) : (
+            <button
+              disabled={isLoading}
+              type="submit"
+              className="bg-blue-500 text-white px-2 py-1 cursor-pointer rounded hover:bg-blue-600 transition-colors"
+            >
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+          )}
         </form>
       </div>
     </div>
